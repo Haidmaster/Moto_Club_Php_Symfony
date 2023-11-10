@@ -1,20 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MotoController!{% endblock %}
+{% block title %}Sorties{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nom</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for moto in motos %}
+                <tr>
+                    <td scope="row">{{moto.id}}</td>
+                    <td>{{moto.libelle}}</td>
+                    <td>
+                        <a href="{{path('moto_show',{'id': moto.id})}}" class="btn btn-primary">Détails</a>
+                        <a href="{{ path('moto_edit',{'id': moto.id})}}" class="btn btn-primary">Modifier</a>
+                        <a href="{{ path('moto_delete',{'id': moto.id})}}" class="btn btn-primary">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/Haider formation/Formation/Php/Symfony/club_moto_damiens/Moto_Club_Php_Symfony/src/Controller/MotoController.php'|file_link(0) }}">src/Controller/MotoController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/Haider formation/Formation/Php/Symfony/club_moto_damiens/Moto_Club_Php_Symfony/templates/moto/index.html.twig'|file_link(0) }}">templates/moto/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <a href="{{ path('moto_create')}}" class="btn btn-primary">Ajouter une moto</a>
+
+
 {% endblock %}

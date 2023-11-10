@@ -21,6 +21,24 @@ class AdhesionRepository extends ServiceEntityRepository
         parent::__construct($registry, Adhesion::class);
     }
 
+    public function save(Adhesion $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Adhesion $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
 //    /**
 //     * @return Adhesion[] Returns an array of Adhesion objects
 //     */

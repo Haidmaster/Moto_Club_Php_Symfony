@@ -21,6 +21,24 @@ class MotoRepository extends ServiceEntityRepository
         parent::__construct($registry, Moto::class);
     }
 
+    public function save(Moto $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Moto $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
 //    /**
 //     * @return Moto[] Returns an array of Moto objects
 //     */
