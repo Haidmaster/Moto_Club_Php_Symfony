@@ -4,6 +4,8 @@ namespace App\Controller;
 
 
 use App\Entity\Modele;
+use App\Form\MarqueType;
+use App\Form\ModeleType;
 use App\Repository\ModeleRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,13 +32,13 @@ class ModeleController extends AbstractController
     }
 
     #[Route('/creation', name: 'create', methods: ['GET', 'POST'])]
-    public function create(Request $request, ModeleRepository $modeleRepository): Response
+    public function create(Request $request, ModeleRepository $repo): Response
     {
         $modele = new Modele();
         $form = $this->createForm(ModeleType::class, $modele);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $modeleRepository->save($modele, true);
+            $repo->save($modele, true);
             $this->addFlash('success', 'Le modèle a bien été ajouté.');
             return $this->redirectToRoute('modele_index');
         }
@@ -46,13 +48,22 @@ class ModeleController extends AbstractController
     }
 
     #[Route('/edition/{id}', name: 'edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    public function edit(): Response
+    public function edit(Request $request, Modele $modele, ModeleRepository $repo): Response
     {
-        dd(__METHOD__);
+        $form = $this->createForm(MarqueType::class, $modele);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $repo->save($modele, true);
+            return $this->redirectToRoute('modele_index');
+        }
+        return $this->render('modele/edit.html.twig', [
+            'formView' => $form->createView(),
+        ]);
     }
     #[Route('/delete/{id}', name: 'delete', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function delete(): Response
+    public function delete(Modele $modele, ModeleRepository $repo): Response
     {
-        dd(__METHOD__);
+        $repo->remove($modele, true);
+        return $this->redirectToRoute('modele_index');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Marque;
 use App\Form\MarqueType;
 use App\Repository\MarqueRepository;
+use Proxies\__CG__\App\Entity\Marque as EntityMarque;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,10 +16,10 @@ class MarqueController extends AbstractController
 {
 
     #[Route('/', name: 'index', methods: ['GET'])]
-    public function index(MarqueRepository $marqueRepository): Response
+    public function index(MarqueRepository $repo): Response
     {
         return $this->render('marque/index.html.twig', [
-            'marques' => $marqueRepository->findAll()
+            'marques' => $repo->findAll()
         ]);
     }
     #[Route('/details/{id}', name: 'show', requirements: ['id' => '\d+'], methods: ['GET'])]
@@ -39,25 +40,32 @@ class MarqueController extends AbstractController
         $form = $this->createForm(MarqueType::class, $marque);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $repo->save($marque, true);
             return $this->redirectToRoute('marque_index');
         }
 
         return $this->render('marque/create.html.twig', [
-            'form' => $form->createView(),
+            'formView' => $form->createView(),
         ]);
-
-        dd(__METHOD__);
     }
     #[Route('/edition/{id}', name: 'edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    public function edit(): Response
+    public function edit(Marque $marque, Request $request, MarqueRepository $repo): Response
     {
-        dd(__METHOD__);
+        $form = $this->createForm(MarqueType::class, $marque);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $repo->save($marque, true);
+            return $this->redirectToRoute('marque_index');
+        }
+        return $this->render('marque/edit.html.twig', [
+            'formView' => $form->createView(),
+        ]);
     }
     #[Route('/suppression/{id}', name: 'delete', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function delete(): Response
-    {
-        dd(__METHOD__);
+    public function delete(Marque $marque, MarqueRepository $repo): Response    {
+
+        $repo->remove($marque, true);
+        return $this->redirectToRoute('marque_index');
     }
 }

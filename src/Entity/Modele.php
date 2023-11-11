@@ -40,7 +40,7 @@ class Modele
         return $this->libelle;
     }
 
-    public function setLibelle(string $libelle): static
+    public function setLibelle(string $libelle): self
     {
         $this->libelle = $libelle;
 
@@ -52,7 +52,7 @@ class Modele
         return $this->marque;
     }
 
-    public function setMarque(?Marque $marque): static
+    public function setMarque(?Marque $marque): self
     {
         $this->marque = $marque;
 
@@ -67,7 +67,7 @@ class Modele
         return $this->motos;
     }
 
-    public function addMoto(Moto $moto): static
+    public function addMoto(Moto $moto): self
     {
         if (!$this->motos->contains($moto)) {
             $this->motos->add($moto);
